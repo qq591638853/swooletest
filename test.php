@@ -1,25 +1,21 @@
 <?php
+//创建Server对象，监听 127.0.0.1:9501端口
+$serv = new Swoole\Server("127.0.0.1", 9501);
 
-    $host = '0.0.0.0';
-    $port = 9501;
-//    $model = 'tcp';
-//    $sock_type = '';
-    $server = new swoole_server($host,$port);
-    #    $model 默认是SWOOLE_PROCESS
-    #      $SOCK_type 默认是 SWOOLE_SOCK_TCP:
+//监听连接进入事件
+$serv->on('Connect', function ($serv, $fd) {
+echo "Client: Connect.\n";
+});
 
-    #   $event l类型
-    # connect   $serv $fd
-    # receive
-    # close,了解默认的参数配置
-    $server->on('connect',function($serv,$fd){
-        echo '建立所有的链接';
-    });
+//监听数据接收事件
+$serv->on('Receive', function ($serv, $fd, $from_id, $data) {
+$serv->send($fd, "Server: ".$data);
+});
 
+//监听连接关闭事件
+$serv->on('Close', function ($serv, $fd) {
+echo "Client: Close.\n";
+});
 
-
-
-
-
-
- ?>
+//启动服务器
+$serv->start();
