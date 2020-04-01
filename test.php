@@ -1,6 +1,6 @@
 <?php
 
-    $host = '0.0.0.0';
+    $host = '127.0.0.1';
     $port = 9501;
 //    $model = 'tcp';
 //    $sock_type = '';
